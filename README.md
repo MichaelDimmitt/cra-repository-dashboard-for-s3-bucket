@@ -12,6 +12,7 @@ Currently using minimal-react-starter as the base. No complaints.
 3) npm run start
 4) open https://www.localhost:3000
 5) check the terminal if you are already running on port 3000.
+6) deploying to s3: `npm run build && aws s3 sync build/ s3://repository-dashboard`
 
 Regards, Michael Dimmitt
 
