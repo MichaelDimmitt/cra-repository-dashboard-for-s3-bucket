@@ -1,10 +1,6 @@
-This iteration is a proof of concept website.
-
-Currently using minimal-react-starter as the base. No complaints.
-<br>However as the project is starting to progress I may shift and start implementing some tdd.</br>
-
 ## What does it do?
-## Wait and see 😘
+Drag and drop for organizing github projects ...
+see the prototype on the [s3bucket](http://repository-dashboard.s3-website-us-east-1.amazonaws.com/)
 
 ## Installation Instructions:
 1) clone the project
