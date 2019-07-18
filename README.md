@@ -4,8 +4,8 @@ see the prototype on the [s3bucket](http://repository-dashboard.s3-website-us-ea
 
 ## Installation Instructions:
 1) clone the project
-2) npm install
-3) npm run start
+2) yarn install
+3) yarn start
 4) open https://www.localhost:3000
 5) check the terminal if you are already running on port 3000.
 6) deploying to s3: `npm run build && aws s3 sync build/ s3://repository-dashboard`
