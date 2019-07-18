@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import PinnedScrollbar from "./PinnedScrollbar.js";
+import PinnedScrollbar from "./components/PinnedScrollbar.js";
 
 document.addEventListener("DOMContentLoaded", function() {
   ReactDOM.render(
