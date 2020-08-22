@@ -102,6 +102,25 @@ class PinnedScrollbar extends React.Component {
     this.onSortEnd = this.onSortEnd.bind(this)
   };
 
+  async componentDidMount() {
+    let token = await localStorage.getItem('githubToken')
+    const code = window.location.href.split('?code=');
+    if(token && code) {  
+      const baseUrl = code[0]
+      window.history.pushState({}, null, code[0]);
+    }
+    else if(!token && code.length === 1) {
+
+    }
+    else {
+      console.log({token, code})
+      token = code[1]
+      const baseUrl = code[0]
+      console.log({baseUrl})
+      localStorage.setItem('githubToken', token)
+      window.history.pushState({}, null, baseUrl);
+    }
+  }
   onSortEnd({oldIndex, newIndex}) {
     console.log({oldIndex, newIndex})
     console.log('reaaached')
@@ -139,6 +158,9 @@ class PinnedScrollbar extends React.Component {
             {/* <SubmitOrError/> */}
           </form>
         </div>
+        <a href="http://github.com/login/oauth/authorize?client_id=76b80b0af7dfb2ff4916&redirect_uri=http://127.0.0.1:3000/">
+          Login
+        </a>
         <Dropdown/>
       </div>
     );
