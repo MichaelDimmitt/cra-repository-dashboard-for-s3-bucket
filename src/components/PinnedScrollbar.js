@@ -103,23 +103,44 @@ class PinnedScrollbar extends React.Component {
   };
 
   async componentDidMount() {
-    let token = await localStorage.getItem('githubToken')
-    const code = window.location.href.split('?code=');
-    if(token && code) {  
-      const baseUrl = code[0]
-      window.history.pushState({}, null, code[0]);
-    }
-    else if(!token && code.length === 1) {
+    const repos = await fetch(`https://api.github.com/users/michaeldimmitt/repos`)
+      .then(function(response) {
+        return response.json();
+      })
 
-    }
-    else {
-      console.log({token, code})
-      token = code[1]
-      const baseUrl = code[0]
-      console.log({baseUrl})
-      localStorage.setItem('githubToken', token)
-      window.history.pushState({}, null, baseUrl);
-    }
+    const trimmedData = repos.map( repo => {
+      return {
+        repo: repo.name,
+        user: repo.owner.login,
+        starCount: repo.stargazers_count,
+        majorityLanguage: repo.language,
+        languageColor: "#89e051",
+        description: repo.description
+      }
+    })
+    console.log({trimmedData})
+      
+      // color needs to be handled differently.
+
+
+    
+    // let token = await localStorage.getItem('githubToken')
+    // const code = window.location.href.split('?code=');
+    // if(token && code) {  
+    //   const baseUrl = code[0]
+    //   window.history.pushState({}, null, code[0]);
+    // }
+    // else if(!token && code.length === 1) {
+
+    // }
+    // else {
+    //   console.log({token, code})
+    //   token = code[1]
+    //   const baseUrl = code[0]
+    //   console.log({baseUrl})
+    //   localStorage.setItem('githubToken', token)
+    //   window.history.pushState({}, null, baseUrl);
+    // }
   }
   onSortEnd({oldIndex, newIndex}) {
     console.log({oldIndex, newIndex})
