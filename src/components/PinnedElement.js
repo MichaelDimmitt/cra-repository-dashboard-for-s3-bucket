@@ -15,7 +15,7 @@ const LineOneHandleAndTitle = ({ info:{ repo, user } }) => (
 )
 
 const LineTwoDescription = ({ info:{ description } }) => (
-  <p className="pinned-item-desc text-gray font-resizer d-block mt-2 mb-3">
+  <p className="pinned-item-desc invert text-gray font-resizer d-block mt-2 mb-3">
     {description}
   </p>
 )
