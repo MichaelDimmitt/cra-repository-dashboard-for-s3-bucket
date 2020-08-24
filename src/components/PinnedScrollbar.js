@@ -41,6 +41,7 @@ class PinnedScrollbar extends React.Component {
   constructor() {
     super();
     this.state = {
+      trimmedData: [],
       // arr: ["De-Nest","the_willywanka_gitfactory",1,0,-"the_willywanka_gitfactory",-2],
       // listOfAllRepos: [
       //  "De-Nest":{ // list of repos:
@@ -103,22 +104,30 @@ class PinnedScrollbar extends React.Component {
   };
 
   async componentDidMount() {
-    const repos = await fetch(`https://api.github.com/users/michaeldimmitt/repos`)
-      .then(function(response) {
-        return response.json();
-      })
-
+    // const repos = await fetch(`https://api.github.com/users/michaeldimmitt/repos`)
+    let repos = (await localStorage.getItem('orgs')) || (await fetch(`https://api.github.com/users/michaeldimmitt/orgs`).then(x => x.json()))
+    if(repos && typeof repos.valueOf() === "string"){
+      repos = JSON.parse(repos)
+    }
+    console.log({repos})
     const trimmedData = repos.map( repo => {
-      return {
-        repo: repo.name,
-        user: repo.owner.login,
-        starCount: repo.stargazers_count,
-        majorityLanguage: repo.language,
-        languageColor: "#89e051",
-        description: repo.description
-      }
+      const {avatar_url, login} = repo
+      console.log({repo}, repo.avatar_url, repo.login)
+      return { avatar_url, login }
     })
-    console.log({trimmedData})
+    this.setState({trimmedData})
+    localStorage.setItem('orgs', JSON.stringify(trimmedData))
+    // const trimmedData = repos.map( repo => {
+    //   return {
+    //     repo: repo.name,
+    //     user: repo.owner.login,
+    //     starCount: repo.stargazers_count,
+    //     majorityLanguage: repo.language,
+    //     languageColor: "#89e051",
+    //     description: repo.description
+    //   }
+    // })
+    // console.log({trimmedData})
       
       // color needs to be handled differently.
 
@@ -171,6 +180,15 @@ class PinnedScrollbar extends React.Component {
     return (
       <div className="mainy" >
         <div className="js-pinned-items-reorder-container" style={{padding: '10px 0px 0px 10px', flex:'12', justifyContent:'space-evenly'}}> {/*element needed for error message*/}
+          <div style={{margin: '0px auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '770px'}}>
+          { 
+            this.state.trimmedData && this.state.trimmedData.map( ({avatar_url, login}) => 
+              <img style={{margin: '10px'}} title={login} height="50" width="50" src={avatar_url} />
+            )
+          }
+          
+          </div>
+          <br/>
           <Header/>
           <br/>
           {/* <button type="submit" onClick={() => this.makeNegative({index:1, arr: this.state.arr, orderList:this.state.orderList})}></button> */}
@@ -179,10 +197,10 @@ class PinnedScrollbar extends React.Component {
             {/* <SubmitOrError/> */}
           </form>
         </div>
-        <a href="http://github.com/login/oauth/authorize?client_id=76b80b0af7dfb2ff4916&redirect_uri=http://127.0.0.1:3000/">
+        {/* <a href="http://github.com/login/oauth/authorize?client_id=76b80b0af7dfb2ff4916&redirect_uri=http://127.0.0.1:3000/">
           Login
         </a>
-        <Dropdown/>
+        <Dropdown/> */}
       </div>
     );
   }
