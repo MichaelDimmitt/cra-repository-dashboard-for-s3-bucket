@@ -25,10 +25,17 @@ const NewItem = ({ info:{repo, user, description, starCount, majorityLanguage, l
 );
 }
 
-const SortableItem = SortableElement( ({repoOrderValue, index, listOfAllRepos}) =>{
-  console.log({repoOrderValue, repo: listOfAllRepos[repoOrderValue]})
+const SortableItem = SortableElement( ({repoOrderValue, index, listOfAllRepos}) => {
+  // console.log({repoOrderValue, repo: listOfAllRepos[repoOrderValue]})
   return <NewItem key={`item-${index}`} info={listOfAllRepos[repoOrderValue]} />
 })
+const OrgComponent = ({listOrgs, login, avatar_url, handleClick}) => {
+  const orgSelected = listOrgs.includes(login)
+  return <span title={login} onClick={(e)=> { handleClick(e, login, orgSelected)} } style={{position: 'relative'}}>
+    { orgSelected ? <input className="checkLabel" type="checkbox" name="vehicle3" value="Boat" checked /> : '' }
+    <img className={ orgSelected ? "selected" : ''} style={{margin: '10px'}} height="50" width="50" src={avatar_url} />
+  </span>
+}
 const SortableList = SortableContainer(({orderList, listOfAllRepos}) =>{
   return <ol className="thing try js-pinned-items-reorder-list" >
     {
@@ -41,6 +48,7 @@ class PinnedScrollbar extends React.Component {
   constructor() {
     super();
     this.state = {
+      listOrgs: ['jax-ex'],
       trimmedData: [],
       // arr: ["De-Nest","the_willywanka_gitfactory",1,0,-"the_willywanka_gitfactory",-2],
       // listOfAllRepos: [
@@ -174,23 +182,29 @@ class PinnedScrollbar extends React.Component {
   componentDidUpdate() {
     console.log('hi',this.state.orderList,'hi')
   }
-  handleClick(e, login) {
+  handleClick(e, login, orgSelected) {
     e.preventDefault();
-    
-    alert(`The link was clicked.${login}`);
+    let listOrgs = this.state.listOrgs;
+
+    if(orgSelected){
+      // exists in list needs to be removed
+      listOrgs = listOrgs.filter(e => e !== login)
+      this.setState({listOrgs})
+    }
+    else {
+      // not in list needs to be added
+      listOrgs.push(login)
+      this.setState({listOrgs})
+    }
   }
   render() { /* classes used, externally, "js-pinned-repos-reorder-container" "js-pinned-repos-reorder-form" "js-pinned-repos-reorder-list" */
-  console.log('hi',this.state.orderList,'hi')
     return (
       <div className="mainy" >
         <div className="js-pinned-items-reorder-container" style={{padding: '10px 0px 0px 10px', flex:'12', justifyContent:'space-evenly'}}> {/*element needed for error message*/}
           <div style={{margin: '0px auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '770px'}}>
             { 
               this.state.trimmedData && this.state.trimmedData.map( ({avatar_url, login}) => 
-                <span onClick={(e)=> {this.handleClick(e, login)} } style={{position: 'relative'}}>
-                  <input className="checkLabel" type="checkbox" name="vehicle3" value="Boat" checked />
-                  <img className="selected" style={{margin: '10px'}} title={login} height="50" width="50" src={avatar_url} />
-                </span>
+                <OrgComponent listOrgs={this.state.listOrgs} login={login} avatar_url={avatar_url} handleClick={this.handleClick.bind(this)}/> 
               )
             }
           </div>
