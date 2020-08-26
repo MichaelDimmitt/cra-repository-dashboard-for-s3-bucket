@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 const { AltItem } = require('./altItem.js')
 const { PinnedElement } = require('./PinnedElement.js')
@@ -174,20 +174,27 @@ class PinnedScrollbar extends React.Component {
   componentDidUpdate() {
     console.log('hi',this.state.orderList,'hi')
   }
-
+  handleClick(e, login) {
+    e.preventDefault();
+    
+    alert(`The link was clicked.${login}`);
+  }
   render() { /* classes used, externally, "js-pinned-repos-reorder-container" "js-pinned-repos-reorder-form" "js-pinned-repos-reorder-list" */
   console.log('hi',this.state.orderList,'hi')
     return (
       <div className="mainy" >
         <div className="js-pinned-items-reorder-container" style={{padding: '10px 0px 0px 10px', flex:'12', justifyContent:'space-evenly'}}> {/*element needed for error message*/}
           <div style={{margin: '0px auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', maxWidth: '770px'}}>
-          { 
-            this.state.trimmedData && this.state.trimmedData.map( ({avatar_url, login}) => 
-              <img style={{margin: '10px'}} title={login} height="50" width="50" src={avatar_url} />
-            )
-          }
-          
+            { 
+              this.state.trimmedData && this.state.trimmedData.map( ({avatar_url, login}) => 
+                <span onClick={(e)=> {this.handleClick(e, login)} } style={{position: 'relative'}}>
+                  <input className="checkLabel" type="checkbox" name="vehicle3" value="Boat" checked />
+                  <img className="selected" style={{margin: '10px'}} title={login} height="50" width="50" src={avatar_url} />
+                </span>
+              )
+            }
           </div>
+
           <br/>
           <Header/>
           <br/>
